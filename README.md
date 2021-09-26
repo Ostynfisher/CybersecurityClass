@@ -1,3 +1,5 @@
+![Diagram-with-elk](https://user-images.githubusercontent.com/84002157/134790893-f77c6593-72b3-4005-b188-138fe65c3ddd.PNG)
+![docker-ps_-a](https://user-images.githubusercontent.com/84002157/134790895-0d033a5c-1e72-4e05-a2a0-7b9fc7af0afb.PNG)
 ## Automated ELK Stack Deployment
 
 The files in this repository were used to configure the network depicted below.
