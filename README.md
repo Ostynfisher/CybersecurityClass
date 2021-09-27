@@ -1,14 +1,12 @@
-![Diagram-with-elk](https://user-images.githubusercontent.com/84002157/134790893-f77c6593-72b3-4005-b188-138fe65c3ddd.PNG)
-![docker-ps_-a](https://user-images.githubusercontent.com/84002157/134790895-0d033a5c-1e72-4e05-a2a0-7b9fc7af0afb.PNG)
 ## Automated ELK Stack Deployment
 
 The files in this repository were used to configure the network depicted below.
 
-!(Images/Diagram-with-elk.png)
+![image](https://github.com/Ostynfisher/CybersecurityClass/blob/2bd795b3065cff19c0ad06178a7e4bb2b5a4d189/Images/Diagram-with-elk.PNG)
 
 These files have been tested and used to generate a live ELK deployment on Azure. They can be used to either recreate the entire deployment pictured above. Alternatively, select portions of the yml or config file may be used to install only certain pieces of it, such as Filebeat.
 
-  - _TODO: Enter the playbook file._
+  - install-elk.yml
 
 This document contains the following details:
 - Description of the Topology
@@ -66,7 +64,7 @@ The playbook implements the following tasks:
 
 The following screenshot displays the result of running `docker ps` after successfully configuring the ELK instance.
 
-!(Images/docker-ps_-a.png)
+![image](https://github.com/Ostynfisher/CybersecurityClass/blob/2bd795b3065cff19c0ad06178a7e4bb2b5a4d189/Images/docker-ps_-a.PNG)
 
 ### Target Machines & Beats
 This ELK server is configured to monitor the following machines:
@@ -78,7 +76,8 @@ We have installed the following Beats on these machines:
 - Filebeat
 
 These Beats allow us to collect the following information from each machine:
-- _TODO: In 1-2 sentences, explain what kind of data each beat collects, and provide 1 example of what you expect to see. E.g., `Winlogbeat` collects Windows logs, which we use to track user logon events, etc._
+- **Filebeat** will collect log data and log events from a specified location, in our case the Web VM's. Filebeat then send the data to an indexing company in our case elasticsearch. Finally, elasticsearch uploads that data to Kibana.
+- **Metricbeat** collects metrics and statistics from the services running on the server. Metricbeat is a great way to offload management of the server as it will keep an eye on services such as Apache and HAProxy. This data is also sent to an indexing source, again elasticsearch for us, then finally uploaded to Kibana.
 
 ### Using the Playbook
 In order to use the playbook, you will need to have an Ansible control node already configured. Assuming you have such a control node provisioned: 
@@ -86,39 +85,43 @@ In order to use the playbook, you will need to have an Ansible control node alre
 ### Clone the repository
 SSH into the control node and follow the steps below:
 - Copy the repository with:
-'''
+```
 git clone https://github.com/Ostynfisher/CybersecurityClass.git
-'''
+```
 - Move cloned items from /CybersecurityClass/ansible to /etc/ansible
-'''
+```
  mv ./CybersecurityClass/ansible/* /etc/ansible/
-'''
+```
 **WARNING: This replaces entire ansible folder. Executing this code will remove all previous code in this folder.**
 
 - Update the hosts file to include...
-Change directories into the ansible directory that you just moved files into.
-'''
+* Change directories into the ansible directory that you just moved files into.
+```
 cd /etc/ansible
-'''
-
-You then must open the hosts file within the ansible directory.
-'''
+```
+* The files within this directory ending in **.yml** are the playbook files
+* You then must open the hosts file within the ansible directory.
+```
 nano hosts
-'''
-Now you uncomment the [webservers] line by removing the #'s, and add the following under the webservers...
-'''
+```
+* Now you uncomment the [webservers] line by removing the #'s, and add the following under the webservers...
+```
 10.0.0.5 ansible_python_interpreter=/usr/bin/python3
 10.0.0.7 ansible_python_interpreter=/usr/bin/python3
 10.0.0.9 ansible_python_interpreter=/usr/bin/python3
 
 [elk]
 10.1.0.4 ansible_python_interpreter=/usr/bin/python3
-'''
+```
+Replace the IP's above with those of your VM's. 
+* Once this is done you can run the playbook with the command...
+```
+ansible-playbook install-elk.yml
+ansible-playbook install-filebeat.yml
+ansible-playbook install-metricbeat.yml
+```
+* This should set up the ELK VM as well as configure it with the correct programs.
+* To ensure the playbooks have ran correctly you can go to **http://[your.VM.IP]:5601/app/kibana** 
+* This playbook is to be ran on your JumpBox VM to setup and configure the new ELK stack as well as configure the filebeat and metricbeat on the web VM's.
 
-- Run the playbook, and navigate to ____ to check that the installation worked as expected.
-
-_TODO: Answer the following questions to fill in the blanks:_
-- _Which file is the playbook? Where do you copy it?_
-- _Which file do you update to make Ansible run the playbook on a specific machine? How do I specify which machine to install the ELK server on versus which to install Filebeat on?_
-- _Which URL do you navigate to in order to check that the ELK server is running?
 
